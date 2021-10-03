@@ -1,10 +1,6 @@
 <template>
     <div>
         <div>Admin</div>
-        <!--<p>{{projectData.header}}</p>-->
-        <!--<hr />-->
-        <!--<p>{{projectData.main[0]}}</p>-->
-        
         <input ref="newheadertitle" type="text" placeholder="header title"/>
         <input ref="newheadervideo" type="text" placeholder="header video link"/>
         <input ref="newheadercontent" type="text" placeholder="header content"/>
@@ -45,6 +41,9 @@ export default {
                 video,
                 content
           })
+        title = ''
+        video = ''
+        content = ''
         //   .then((res)=>console.log(res))
         //   .catch((error)=>console.log(error))
         //   axios({
@@ -71,8 +70,11 @@ export default {
         }
     }
 }
-</script>
+</script >
 
-<style>
+<style scoped>
+ button{
+        background:red;
+    }
 
 </style>

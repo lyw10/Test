@@ -86,11 +86,11 @@
 import HeaderWrap from '../components/Wrap/headerWrap.vue'
 import convinced from '../components/Wrap/convinced.vue'
 export default {
-  components:{
+    components:{
     HeaderWrap,
     convinced
   },
-  data() {
+    data() {
     return {
       aboutMy:
         "🥣，这是我的个人网站，用于记录自己的前端作品，未来将用于面试，客户展示什么的。Whatever~",
@@ -138,7 +138,7 @@ export default {
       ]
     };
   },
-  mounted() {
+    mounted() {
     const html = document.documentElement;
     const convinceds = document.querySelectorAll(".convinced");
 
@@ -177,7 +177,23 @@ export default {
     let headertext = document.querySelectorAll(".wrapper");
     headertext.forEach(e => e.classList.add("no-skew"));
   },
-    
+    methods:{
+        toTop(){
+            let start;
+            function deal(timestamp){
+                if (start === undefined)
+                start = timestamp;
+                const elapsed = timestamp - start;
+                
+                document.documentElement.scrollTop =  Math.max(0.94 * document.documentElement.scrollTop, 0) ;
+                if(elapsed < 2000){
+                    window.requestAnimationFrame(deal)
+                }
+            }
+            
+            window.requestAnimationFrame(deal)
+        }
+    }
 }
 </script>
 

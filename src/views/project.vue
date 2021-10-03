@@ -153,7 +153,13 @@ export default {
           }
     	},
     	next(){
-    	    console.log(this.$router.params.id)
+    	    let nextId
+    	    if(this.$route.params.id >= this.projectData.header.length){
+    	        nextId = 1
+    	    }else{
+    	        nextId = parseInt(this.$route.params.id) + 1;
+    	    }
+    	    this.$router.push({name:'PROJECT',params:{id:nextId}})
     	}
     },
     beforeDestroy(){
@@ -164,7 +170,8 @@ export default {
 
 <style scoped>
 body {
-  padding-bottom: 10rem;
+  /*padding-bottom: 10rem;*/
+  overflow: hidden;
 }
 header {
   width: 90vw;

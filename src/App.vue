@@ -1,12 +1,6 @@
 <template>
   <div id="app">
       <NavBar/>
-      <!-- <router-link to="/login">Login</router-link>
-      <router-link to="/about">About</router-link>
-      <router-link to="/project">Project</router-link> -->
-       <!--<router-link to="/about">About</router-link>-->
-       <!--<router-link  v-for="i in 3"-->
-       <!-- :key="i" :to="{name:'PROJECT',params:{id:i}}"> route:{{$route.params.id}}-{{i}}/ </router-link>-->
       <router-view :key='$route.fullPath'></router-view>
   </div>
 </template>
@@ -20,13 +14,7 @@ import {mapState,mapActions} from 'vuex'
 export default {
     components:{
         NavBar,
-        // Login,
-        // About,
-        // Project
-    },
-    data(){
-        return{
-        }
+        Login
     },
 };
 </script>

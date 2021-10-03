@@ -139,8 +139,6 @@ export default {
     };
   },
   mounted() {
-    console.log('about mounted');
-    console.log(this.$store.state);
     const html = document.documentElement;
     const convinceds = document.querySelectorAll(".convinced");
 
@@ -162,26 +160,20 @@ export default {
     const contentWrapper = document.querySelectorAll(".wrapper");
     const headerContent = document.querySelectorAll(".header-content");
     const copyContent = document.querySelectorAll(".copy-content");
+    let length = headerContent.length;
+    for (let i = 0; i < length; i++) {
+      copyContent[i].innerHTML = headerContent[i].innerHTML;
 
-    let speed = parseInt(200 / (document.body.offsetWidth * 0.03));
-    // console.log("speed:", speed);
-    // setInterval(()=>{
-    //   contentWrapper[0].style.left='100'+'px';
-    //   // console.log(contentWrapper[0].getBoundingClientRect())
-    //   console.log(contentWrapper[0].style.left);
-    // },2000)
-    // for (let i = 0; i < headerContent.length; i++) {
-    //   copyContent[i].innerHTML = headerContent[i].innerHTML;
-
-    //   function Marquee() {
-    //     if (copyContent[i].offsetWidth - contentWrapper[i].scrollLeft <= 0) {
-    //       contentWrapper[i].scrollLeft -= headerContent[i].offsetWidth;
-    //     } else {
-    //       contentWrapper[i].scrollLeft++;
-    //     }
-    //   }
-    //   setInterval(Marquee, speed);
-    // }
+      function Marquee() {
+        if (copyContent[i].offsetWidth - contentWrapper[i].scrollLeft <= 0) {
+          contentWrapper[i].scrollLeft -= headerContent[i].offsetWidth;
+        } else {
+          contentWrapper[i].scrollLeft+=3;
+        }
+        window.requestAnimationFrame(Marquee)
+      }
+     window.requestAnimationFrame(Marquee)
+    }
     let headertext = document.querySelectorAll(".wrapper");
     headertext.forEach(e => e.classList.add("no-skew"));
   },
@@ -394,7 +386,7 @@ main .handle-list li:hover .on-hover {
   margin-top: 2rem;
   text-indent: 4rem;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) and (min-width: 480px){
   .home-img {
     width: 60%;
   }
@@ -414,17 +406,41 @@ main .handle-list li:hover .on-hover {
     border-right: 0.1rem solid var(--border);
   }
 }
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 480px) {
   .home-img {
     width: 60%;
+    height: 60%;
+  }
+  header{
+      height: 50rem;
+      min-height: 20rem;
+  }
+  header ul{
+      height: 38%;
+  }
+  header > ul li .wrapper >>> div p{
+      font-size: var(--text);
+  }
+  main,main > *{
+      margin-top:4rem;
   }
   main .sec-title {
     font-family: "NotoSansSC-400";
+    font-size: var(--text-nav);
+    width: 80%;
   }
   main .info {
-    width: 60%;
+    width: 70%;
     padding-right: 10%;
+    font-size: var(--sm-text);
   }
+  main .convinced{
+      font-size: 3rem;
+      margin:10rem 0;
+  }
+  main .convinced >>> a {
+  font-size: var(--xs-text);
+}
   .outline-text {
     -webkit-text-stroke-width: 0.5px;
   }
@@ -434,13 +450,20 @@ main .handle-list li:hover .on-hover {
   main .award-list > li p {
     text-indent: 4rem;
     width: 50%;
+    font-size: var(--sm-text);
   }
   main .handle-list li {
     flex-basis: 100%;
     border-bottom: 0.1rem solid var(--border);
+    padding-top: 4rem;
+    height:45rem;
   }
+   main .handle-list .handle-icon{
+       width: 10rem;
+       height: 10rem;
+   }
   main .social {
-    font-size: var(--big-text);
+    font-size: var(--text-nav);
   }
 }
 </style>

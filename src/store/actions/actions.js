@@ -12,6 +12,17 @@ export default {
         .then(data => {commit('saveMain',data.data)})
         .catch(err => console.error(err))
     },
+    login({commit},{username,password}){
+        return model.login(username,password)
+        .then(data => console.log(data))
+        .catch(err => console.error(err))
+    },
+    newHeader({commit},data){
+        console.log('actions',data);
+        return model.newHeader(data)
+        .then(data => console.log(data))
+        .catch(err => console.error(err))
+    },
     updateCountAsycn(store, data) {
     setTimeout(() => {
       store.commit("updateCount", { num: data.num }); //因为updateCount中使用参数对象

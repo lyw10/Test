@@ -6,13 +6,13 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
         "/": "http://47.100.104.162:8000",
-    //   "/main": "http://47.100.104.162:8000",
+        // "/admin": "http://47.100.104.162:8000",
+        // "/newHeader":"http://47.100.104.162:8000"
     },
 
     // Various Dev Server settings

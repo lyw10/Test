@@ -1,74 +1,47 @@
 <template>
   <nav class="flex-around">
     <div class="grade">
-      <span :xValue="[currentId === -1 || currentId === 'NaN' ? $store.state.xValue = 'X' : $store.state.xValue = currentId ]">{{xValue}}</span>
+      <span :xValue="[$route.params.id == undefined ? $store.state.xValue = 'X' : $store.state.xValue = $route.params.id ]">{{xValue}}</span>
       /Y
     </div>
     <div>
       <a
         class="about"
-        v-bind:class="{'nav-active':currentId === -1}"
-        @click.prevent="$store.state.currentId = -1;"
-        ><router-link to="/about">About</router-link></a
-      >
+        v-bind:class="{'nav-active':$route.params.id  == undefined}"
+        >
+          <router-link to="/about">About</router-link>
+        </a>
     </div>
     <ul class="flex">
-      <a
+        <router-link
         v-for="item,index in projectData.header"
         :key="index"
-        v-bind:class="{'nav-active':currentId === index+1}"
-        @click.prevent="x(index)"
-      >
-          <router-link :to="{name:'PROJECT',params:{id:index+1}}"> {{item.title}}/ </router-link>
-      </a>
+        :class="{'nav-active': $route.params.id == index+1}"
+        :to="{name:'PROJECT',params:{id:index+1}}"> {{item.title}}/ </router-link>
     </ul>
   </nav>
 </template>
 
 <script>
-// import event from '../assets/event'
 import {mapState,mapActions} from 'vuex'
 export default {
-    name:'NavBar',
     data(){
         return{
-            // currentId: -1,
-            // xValue:'X',
         }
     },
     computed:{
         ...mapState({
-          currentId:'currentId',
           xValue:'xValue',
           projectData:'projectData',
         })
     },
-    mounted(){
+    created(){
         //navbar加载就获取header
         this.fetchHeader()
-
     },
     methods:{
-      ...mapActions(['fetchHeader','updateCountAsycn']),
-
-      x: function (index) {
-        this.$store.state.currentId = index+1;
-      }
+      ...mapActions(['fetchHeader']),
     },
-    
-    // watch: {
-    //     $route() {
-    //       let pathname = window.location.pathname;
-    //       console.log(pathname);
-    //         if(pathname === '/about' || pathname === '/'){
-    //         this.$store.state.currentId = -1;
-    //       }else{
-    //         let num = pathname.split('/')[2]
-    //         console.log(num);
-    //         this.$store.state.currentId = num;
-    //       }
-    //       console.log(this.$store.state.currentId);
-    //     }
         //   
     
         
@@ -132,6 +105,23 @@ export default {
     .nav-active {
       color: var(--important);
       text-decoration: line-through;
+    }
+    
+    @media screen and (max-width: 480px) {
+        nav {
+      font-size: var(--sm-text);
+      width: 90%;
+    }
+    nav > ul {
+      width: 70%;
+      flex-wrap: wrap;
+    }
+    .about{
+        writing-mode:vertical-rl;
+    }
+      .grade {
+        display: none;
+      }
     }
 
 </style>

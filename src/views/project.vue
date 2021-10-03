@@ -2,35 +2,34 @@
   <div>
       <header class="relative">
           <video
-            :src="projectData.header[currentId-1].video"
+            :src="projectData.header[$route.params.id-1].video"
             autoplay
             loop
             muted
             class="absolute header-video"
-            ref="headerVideo"
-          ></video>
-
+            ref="headerVideo">
+          </video>
           <ul class="per-flex" ref="headerUl">
             <li style="width: 10%">
-              <projectWrap>{{projectTitle}}</projectWrap>
-              <projectWrap class="wrap-b" style="bottom: 0">{{projectTitle}}</projectWrap>
+              <projectWrap></projectWrap>
+              <projectWrap class="wrap-b" style="bottom: 0"></projectWrap>
             </li>
             <li style="width: 20%"></li>
             <li style="width: 10%; z-index: 10">
-              <projectWrap>{{projectTitle}}</projectWrap>
+              <projectWrap></projectWrap>
             </li>
             <li style="width: 35%">
-              <projectWrap class="wrap-b" style="bottom: 0">{{projectTitle}}</projectWrap>
+              <projectWrap class="wrap-b" style="bottom: 0"></projectWrap>
             </li>
             <li style="width: 25%">
-              <projectWrap>{{projectTitle}}</projectWrap>
+              <projectWrap></projectWrap>
             </li>
           </ul>
         </header>
 
         <main style="width: 100%" class="per-flex flex-col">
           <section class="main-content">
-            <h1 class="indent">{{projectData.header[currentId-1].content}}</h1>
+            <h1 class="indent">{{projectData.header[$route.params.id-1].content}}</h1>
             <img style="display: none"/>
           </section>
 
@@ -51,41 +50,82 @@
             </span>
           </div>
         </footer>
+        <div>
   </div>
+  </div>
+  
 </template>
 
 <script>
 import {mapState,mapActions,mapGetters} from 'vuex'
 import projectWrap from '../components/Wrap/projectWrap.vue'
+
+
 export default {
     props:['id'],
     components:{
       projectWrap
     },
+    data(){
+        return{
+            ok:''
+        }
+    },
     computed:{
         ...mapState({
-            currentId:'currentId',
             projectData:'projectData',
         }),
-        ...mapGetters(['projectTitle','currentMain'])
+        currentMain(){
+            return this.projectData.main.filter(item => item.hid == this.$route.params.id)
+        }
+    },
+    created(){
+        //页面跳转到project  且 第一次进入project 才获取main
+        if(!this.currentMain.length){
+           this.fetchMain()
+        }
+        this.ok = this.throttle(this.addAn,500,false)
     },
     mounted(){
-        //页面跳转到project才获取main
-        this.fetchMain()
+        console.log('mounted')
+        window.addEventListener('scroll',this.ok)
+        
     },
     methods:{
+        //只调用一次
 	...mapActions(['fetchMain']),
-    },
-    updated(){
-        const html = document.documentElement;
-        const projectMove = this.$refs.headerUl.children
+	
+    	throttle(fn, delay = 100,isStart) {
+          if (typeof isStart == "undefined") {
+            isStart = false;
+          } 
+        else if (typeof isStart !== "boolean") {
+            console.log("Not Rigth Input");
+            return;
+          } else {
+            if (isStart) {
+              fn.apply(this, arguments);
+            }
+          }
+        
+          let lastTime = 0;
+          return function () {
+            let nowTime = Date.now();
+            if (nowTime - lastTime > delay) {
+              fn.apply(this, arguments);
+              lastTime = nowTime;
+            }
+          };
+        },
+        addAn(){
+    	    const html = document.documentElement;
+    	    const projectMove = this.$refs.headerUl.children
         const scrollVideo = this.$refs.headerVideo
 
         const proSection = document.querySelectorAll("main section");
         const sectionH1 = document.querySelectorAll("main section h1");
         const sectionImg = document.querySelectorAll("main section img");
-
-        window.addEventListener("scroll", () => {
+        // console.log(projectMove)
           let scrollProject = html.scrollTop;
 
           if (scrollProject > 0) {
@@ -102,7 +142,6 @@ export default {
           for (let i = 0; i < proSection.length; i++) {
             let scrollSction =
               proSection[i].getBoundingClientRect().top - html.clientHeight;
-            // console.log(scrollSction);
 
             if (scrollSction <= -20) {
               sectionH1[i].classList.add("an-section");
@@ -112,25 +151,14 @@ export default {
               sectionImg[i].classList.remove("an-section");
             }
           }
-        })
-
-      },
-    // watch:{
-    //     $route(){
-    //       console.log('project route');
-    //       let pathname = window.location.pathname;
-    //       // console.log('route',pathname)
-    //       if(pathname.split('/')[1] =='project'){
-    //         // console.log('projectnnn');
-    //         let num = pathname.split('/')[2]
-    //         // console.log('route num',num)
-    //         this.$store.state.currentId = parseInt(num)
-    //         console.log(this.$store.state.currentId);
-    //         // console.log('route currentId',this.currentId)
-    //         // document.documentElement.scrollTop = 0;
-    //     }
-    //   }
-    // }
+    	},
+    	next(){
+    	    console.log(this.$router.params.id)
+    	}
+    },
+    beforeDestroy(){
+        window.removeEventListener('scroll', this.ok)
+    }
 };
 </script>
 
@@ -287,7 +315,7 @@ footer:hover div > span > :not(.outline-text) {
   -webkit-text-stroke-color: var(--important);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) and (min-width: 480px) {
   header {
     margin-top: 30rem;
   }
@@ -317,28 +345,33 @@ footer:hover div > span > :not(.outline-text) {
   }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 480px) {
   main {
     margin-top: 10rem;
+   
   }
   header {
-    margin-top: 40rem;
+    margin-top: 20rem;
+    font-size: var(--text);
+    height: 35rem;
   }
   .scroll-video {
     width: 90%;
-    height: 80%;
+    height: 50%;
     top: 20%;
   }
   main .main-content h1 {
     width: 70%;
-    font-size: var(--sm-text);
+    font-size: var(--xs-text);
   }
   main section {
     flex-direction: column;
-    padding: 0 6rem;
+    padding: 0 3rem;
+    margin-bottom:8rem;
   }
   main section h1 {
     width: 100%;
+     font-size: var(--sm-text);
   }
   main section img {
     width: 100%;

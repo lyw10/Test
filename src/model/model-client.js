@@ -15,4 +15,11 @@ export default {
   getMain() {
     return axios.get("/main");
   },
+  login(username,password){
+      return axios.post('/user/login',{username,password})
+  },
+  newHeader(data){
+      console.log('model:',data);
+      return axios.post('/newHeader',data)
+  }
 };
